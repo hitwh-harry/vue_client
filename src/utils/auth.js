@@ -7,6 +7,7 @@ export function getToken() {
 }
 
 export function setToken(token) {
+  // 存储用户信息到浏览器的cookie
   return Cookies.set(TokenKey, token)
 }
 
