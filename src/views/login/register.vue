@@ -78,79 +78,79 @@
   import { register } from "@/api/user.js";
 
 
-  export default {
-    name: 'Login',
-    data() {
-      
-      const validateUsername = (rule, value, callback) => {
-      if (value.length == 0) {
-        callback(new Error('The username can not be empty'))
+export default {
+  name: 'Login',
+  data() {
+
+    const validateUsername = (rule, value, callback) => {
+      if (value.length <=3 ||value.length>30) {
+        callback(new Error('用户名长度应大于3字符且小于30字符'))
       } else {
         callback()
       }
     }
     const validatePassword = (rule, value, callback) => {
-      if (value.length < 6) {
-        callback(new Error('The password can not be less than 6 digits'))
+      if (value.length < 6 || value.length > 30) {
+        callback(new Error('密码长度应大于6字符且小于30字符'))
       } else {
         callback()
       }
     }
 
-      return {
-        detailVisible:false,
-        detailVisible1:false,
+    return {
+      detailVisible: false,
+      detailVisible1: false,
 
-        loginForm: {
-          username: '',
-          password: ''
-        },
-
-        loginRules: {
-          username: [{ required: true, trigger: 'blur', validator: validateUsername }],
-          password: [{ required: true, trigger: 'blur', validator: validatePassword }]
-        },
-
-        password:'',
-        loading: false,
-        passwordType: 'password',
-        redirect: undefined
-      }
-    },
-    watch: {
-      $route: {
-        handler: function(route) {
-          this.redirect = route.query && route.query.redirect
-        },
-        immediate: true
-      }
-    },
-    methods: {
-      showPwd() {
-        if (this.passwordType === 'password') {
-          this.passwordType = ''
-        } else {
-          this.passwordType = 'password'
-        }
-        this.$nextTick(() => {
-          this.$refs.password.focus()
-        })
+      loginForm: {
+        username: '',
+        password: ''
       },
-  
-      back(){
-        this.$router.push("/");
+
+      loginRules: {
+        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
+        password: [{ required: true, trigger: 'blur', validator: validatePassword }]
       },
-  
-      submit() {
-        this.$refs.loginForm.validate(valid => {
+
+      password: '',
+      loading: false,
+      passwordType: 'password',
+      redirect: undefined
+    }
+  },
+  watch: {
+    $route: {
+      handler: function (route) {
+        this.redirect = route.query && route.query.redirect
+      },
+      immediate: true
+    }
+  },
+  methods: {
+    showPwd() {
+      if (this.passwordType === 'password') {
+        this.passwordType = ''
+      } else {
+        this.passwordType = 'password'
+      }
+      this.$nextTick(() => {
+        this.$refs.password.focus()
+      })
+    },
+
+    back() {
+      this.$router.push("/");
+    },
+
+    submit() {
+      this.$refs.loginForm.validate(valid => {
         if (valid) {
-          
-          if(this.loginForm.password==this.password){
-            register(this.loginForm.username.trim(),this.loginForm.password).then((response) => {
-              if(response.data.success=='false'){
-                this.detailVisible1=true;
+
+          if (this.loginForm.password == this.password) {
+            register(this.loginForm.username.trim(), this.loginForm.password).then((response) => {
+              if (response.data.success == 'false') {
+                this.detailVisible1 = true;
               }
-              else{
+              else {
                 this.$alert('注册成功', '', {
                   confirmButtonText: '确定',
                   callback: action => {
@@ -162,8 +162,8 @@
 
             });
           }
-          else{
-            this.detailVisible=true;
+          else {
+            this.detailVisible = true;
           }
 
         } else {
@@ -171,11 +171,10 @@
           return false
         }
       })
-      }
     }
   }
-  </script>
-  
+}
+</script>
   <style lang="scss">
   /* 修复input 背景不协调 和光标变色 */
   /* Detail see https://github.com/PanJiaChen/vue-element-admin/pull/927 */
